@@ -10,7 +10,7 @@ use App\State\ResourceProvider;
 #[ApiResource(
     operations: [
         new Get(
-            uriTemplate: '/resources/{id}',
+            uriTemplate: '/resources/{name}',
             provider   : ResourceProvider::class
         ),
     ]
@@ -18,13 +18,10 @@ use App\State\ResourceProvider;
 class Resource
 {
     #[ApiProperty(identifier: true)]
-    public string $id;
-
     public string $name;
 
-    public function __construct($id)
+    public function __construct($name)
     {
-        $this->id = $id;
-        $this->name = 'Ressource#'.$id;
+        $this->name = $name;
     }
 }

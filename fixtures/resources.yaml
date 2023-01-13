@@ -1,0 +1,7 @@
+App\Entity\Resource:
+  first:
+    name: 'first'
+  second:
+    name: 'second'
+  third:
+    name: 'third'

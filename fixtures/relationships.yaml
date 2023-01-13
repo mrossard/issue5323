@@ -1,0 +1,9 @@
+App\Entity\Relationship:
+  first_to_second:
+    first: '@first'
+    second: '@second'
+    someOtherStuff: 'first and second are related'
+  first_to_third:
+    first: '@first'
+    second: '@third'
+    someOtherStuff: 'first and third are related'

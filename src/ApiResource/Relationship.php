@@ -7,7 +7,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
-use App\State\RelationProvider;
+use App\State\RelationshipProvider;
 
 #[ApiResource(
     operations: [
@@ -23,7 +23,7 @@ use App\State\RelationProvider;
             uriVariables: [
                 'first' => new Link(toProperty: 'first', fromClass: Resource::class),
             ],
-            provider    : RelationProvider::class
+            provider    : RelationshipProvider::class
         ),
     ]
 )]

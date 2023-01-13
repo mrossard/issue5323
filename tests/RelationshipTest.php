@@ -9,22 +9,29 @@ class RelationshipTest extends ApiTestCase
 {
     public function testSomething(): void
     {
-        $response = static::createClient()->request('GET', '/resources/1/relationships');
+        $response = static::createClient()->request('GET', '/resources/first/relationships');
 
         $this->assertResponseIsSuccessful();
         $this->assertMatchesResourceCollectionJsonSchema(Relationship::class);
         $this->assertJsonContains(
             [
                 "@context"=> "/contexts/Relationship",
-                "@id"=> "/resources/1/relationships",
+                "@id"=> "/resources/first/relationships",
                 "@type"=> "hydra:Collection",
                 'hydra:member' => [
                     [
-                        '@id' => '/resources/1/relationships/relatedTo.1',
+                        '@id' => '/resources/first/relationships/second',
                         "@type"=> "Relationship",
-                        "first"=> "/resources/1",
-                        'second' => '/resources/relatedTo.1',
-                        'someOtherStuff' => 'whatever',
+                        "first"=> "/resources/first",
+                        'second' => '/resources/second',
+                        'someOtherStuff' => 'first and second are related',
+                    ],
+                    [
+                        '@id' => '/resources/first/relationships/third',
+                        "@type"=> "Relationship",
+                        "first"=> "/resources/first",
+                        'second' => '/resources/third',
+                        'someOtherStuff' => 'first and third are related',
                     ]
                 ]
             ]
