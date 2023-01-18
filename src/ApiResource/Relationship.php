@@ -48,7 +48,7 @@ class Relationship
 
     public string $someOtherStuff;
 
-    public function __construct(Resource $first, Resource $second, string$stuff)
+    public function __construct(Resource $first, Resource $second, string $stuff)
     {
         $this->first = $first;
         $this->second = $second;

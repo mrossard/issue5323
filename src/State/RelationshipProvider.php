@@ -24,7 +24,7 @@ class RelationshipProvider implements ProviderInterface
      * @param array     $context
      * @return object|array|null
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): \Generator|Resource
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): \Generator|Relationship|null
     {
         if($operation instanceof GetCollection) {
             $entities = $this->repository->findBy(
@@ -41,11 +41,16 @@ class RelationshipProvider implements ProviderInterface
             }
         }
         else{
-            return $this->repository->findBy(
+            $entity = $this->repository->findOneBy(
                 [
                     'first' => $this->resourceRepository->findOneBy(['name' => $uriVariables['first']]),
                     'second' =>$this->resourceRepository->findOneBy(['name' => $uriVariables['second']])
                 ]
+            );
+            return new Relationship(
+                new Resource($entity->getFirst()->getName()),
+                new Resource($entity->getSecond()->getName()),
+                $entity->getSomeOtherStuff()
             );
         }
 

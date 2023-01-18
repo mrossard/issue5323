@@ -46,5 +46,12 @@ class RelationshipTest extends ApiTestCase
         );
 
         $this->assertResponseIsSuccessful();
+        $this->assertJsonContains(
+            [
+                "@context"=> "/contexts/Relationship",
+                "@id"=> "/resources/first/relationships/second",
+                "@type"=> "Relationship",
+            ]
+        );
     }
 }
