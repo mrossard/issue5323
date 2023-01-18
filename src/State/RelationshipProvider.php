@@ -2,6 +2,7 @@
 
 namespace App\State;
 
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\ApiResource\Relationship;
@@ -23,20 +24,31 @@ class RelationshipProvider implements ProviderInterface
      * @param array     $context
      * @return object|array|null
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): \Generator
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): \Generator|Resource
     {
-        $entities = $this->repository->findBy(
-            [
-                'first' => $this->resourceRepository->findOneBy(['name'=>$uriVariables['first']])
-            ]
-        );
-
-        foreach($entities as $entity){
-            yield new Relationship(
-              new Resource($entity->getFirst()->getName()),
-              new Resource($entity->getSecond()->getName()),
-              $entity->getSomeOtherStuff()
+        if($operation instanceof GetCollection) {
+            $entities = $this->repository->findBy(
+                [
+                    'first' => $this->resourceRepository->findOneBy(['name' => $uriVariables['first']])
+                ]
+            );
+            foreach($entities as $entity){
+                yield new Relationship(
+                    new Resource($entity->getFirst()->getName()),
+                    new Resource($entity->getSecond()->getName()),
+                    $entity->getSomeOtherStuff()
+                );
+            }
+        }
+        else{
+            return $this->repository->findBy(
+                [
+                    'first' => $this->resourceRepository->findOneBy(['name' => $uriVariables['first']]),
+                    'second' =>$this->resourceRepository->findOneBy(['name' => $uriVariables['second']])
+                ]
             );
         }
+
+
     }
 }

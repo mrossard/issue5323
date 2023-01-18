@@ -7,7 +7,7 @@ use App\ApiResource\Relationship;
 
 class RelationshipTest extends ApiTestCase
 {
-    public function testSomething(): void
+    public function testGetCollection(): void
     {
         $response = static::createClient()->request('GET', '/resources/first/relationships');
 
@@ -36,5 +36,15 @@ class RelationshipTest extends ApiTestCase
                 ]
             ]
         );
+    }
+
+    public function testGetOne()
+    {
+        $response = static::createClient()->request(
+            'GET',
+            '/resources/first/relationships/second'
+        );
+
+        $this->assertResponseIsSuccessful();
     }
 }

@@ -14,18 +14,30 @@ use App\State\RelationshipProvider;
         new Get(
             uriTemplate : '/resources/{first}/relationships/{second}',
             uriVariables: [
-                'first' => new Link(toProperty: 'first', fromClass: Resource::class),
-                'second' => new Link(toProperty: 'second', fromClass: Resource::class),
+                'first' => new Link(
+                    fromProperty: 'first',
+                    fromClass: Relationship::class,
+                    identifiers: ['first'],
+                ),
+                'second' => new Link(
+                    fromProperty: 'second',
+                    fromClass: Relationship::class,
+                    identifiers: ['second'],
+                ),
             ],
         ),
         new GetCollection(
             uriTemplate : '/resources/{first}/relationships',
             uriVariables: [
-                'first' => new Link(toProperty: 'first', fromClass: Resource::class),
+                'first' => new Link(
+                    fromProperty: 'first',
+                    fromClass: Relationship::class,
+                    identifiers: ['first'],
+                ),
             ],
-            provider    : RelationshipProvider::class
         ),
-    ]
+    ],
+    provider    : RelationshipProvider::class
 )]
 class Relationship
 {
