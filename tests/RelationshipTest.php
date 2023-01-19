@@ -2,11 +2,40 @@
 
 namespace App\Tests;
 
+use ApiPlatform\Api\IriConverterInterface;
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\Relationship;
+use App\Entity\Resource;
+use Doctrine\ORM\EntityManagerInterface;
 
 class RelationshipTest extends ApiTestCase
 {
+    private IriConverterInterface $iriConverter;
+    private EntityManagerInterface $entityManager;
+
+    function setUp(): void
+    {
+        self::bootKernel();
+        $this->iriConverter = static::getContainer()->get(IriConverterInterface::class);
+        $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);
+    }
+
+    function testGetIri()
+    {
+        $first = $this->entityManager->find(Resource::class, 1);
+        $second = $this->entityManager->find(Resource::class, 2);
+
+        $dep = $this->entityManager->getRepository(Relationship::class)->findOneBy(
+            [
+                'first'=>$first,
+                'second'=>$second
+            ]
+        );
+
+        $iri = $this->iriConverter->getIriFromResource($dep);
+        $this->assertTrue(true); //we just need the previous line not to throw an exception
+    }
+
     public function testGetCollection(): void
     {
         $response = static::createClient()->request('GET', '/resources/1/relationships');

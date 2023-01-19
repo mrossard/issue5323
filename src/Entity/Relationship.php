@@ -21,9 +21,8 @@ use Doctrine\ORM\Mapping as ORM;
             uriTemplate: '/resources/{id}/relationships',
             uriVariables: [
                 'id' => new Link(
-                    fromProperty: 'first',
-                    fromClass   : Relationship::class,
-                    identifiers : ['firstId'],
+                    fromProperty: 'id',
+                    fromClass   : Resource::class
                 )
             ],
             provider: RelationShipProvider::class,
@@ -71,4 +70,5 @@ class Relationship
     {
         return $this->first->getId().'-'.$this->second->getId();
     }
+
 }
