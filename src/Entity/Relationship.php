@@ -18,14 +18,15 @@ use Doctrine\ORM\Mapping as ORM;
     operations: [
         new Post(),
         new GetCollection(
-            uriTemplate: '/resources/{firstId}/relationships',
+            uriTemplate: '/resources/{id}/relationships',
             uriVariables: [
                 'firstId' => new Link(
                     fromProperty: 'first',
                     fromClass   : Relationship::class,
                     identifiers : ['firstId'],
                 )
-            ]
+            ],
+            provider: RelationShipProvider::class,
         ),
         new Get(
             uriTemplate: '/resources/{firstId}/relationships/{secondId}',
