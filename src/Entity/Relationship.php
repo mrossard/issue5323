@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
         new GetCollection(
             uriTemplate: '/resources/{id}/relationships',
             uriVariables: [
-                'firstId' => new Link(
+                'id' => new Link(
                     fromProperty: 'first',
                     fromClass   : Relationship::class,
                     identifiers : ['firstId'],
