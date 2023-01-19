@@ -3,35 +3,35 @@
 namespace App\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
-use App\ApiResource\Relationship;
+use App\Entity\Relationship;
 
 class RelationshipTest extends ApiTestCase
 {
     public function testGetCollection(): void
     {
-        $response = static::createClient()->request('GET', '/resources/first/relationships');
+        $response = static::createClient()->request('GET', '/resources/1/relationships');
 
         $this->assertResponseIsSuccessful();
         $this->assertMatchesResourceCollectionJsonSchema(Relationship::class);
         $this->assertJsonContains(
             [
                 "@context"=> "/contexts/Relationship",
-                "@id"=> "/resources/first/relationships",
+                "@id"=> "/resources/1/relationships",
                 "@type"=> "hydra:Collection",
                 'hydra:member' => [
                     [
-                        '@id' => '/resources/first/relationships/second',
+                        '@id' => '/resources/1/relationships/2',
                         "@type"=> "Relationship",
-                        "first"=> "/resources/first",
-                        'second' => '/resources/second',
-                        'someOtherStuff' => 'first and second are related',
+                        "first"=> "/resources/1",
+                        'second' => '/resources/2',
+                        'name' => 'first and second are related',
                     ],
                     [
-                        '@id' => '/resources/first/relationships/third',
+                        '@id' => '/resources/1/relationships/3',
                         "@type"=> "Relationship",
-                        "first"=> "/resources/first",
-                        'second' => '/resources/third',
-                        'someOtherStuff' => 'first and third are related',
+                        "first"=> "/resources/1",
+                        'second' => '/resources/3',
+                        'name' => 'first and third are related',
                     ]
                 ]
             ]
@@ -42,14 +42,14 @@ class RelationshipTest extends ApiTestCase
     {
         $response = static::createClient()->request(
             'GET',
-            '/resources/first/relationships/second'
+            '/resources/1/relationships/2'
         );
 
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains(
             [
                 "@context"=> "/contexts/Relationship",
-                "@id"=> "/resources/first/relationships/second",
+                "@id"=> "/resources/1/relationships/2",
                 "@type"=> "Relationship",
             ]
         );

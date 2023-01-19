@@ -2,12 +2,52 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Post;
 use App\Repository\RelationshipRepository;
+use App\State\RelationshipProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: RelationshipRepository::class)]
+#[ApiResource(
+    operations: [
+        new Post(),
+        new GetCollection(
+            uriTemplate: '/resources/{firstId}/relationships',
+            uriVariables: [
+                'firstId' => new Link(
+                    fromProperty: 'first',
+                    fromClass   : Relationship::class,
+                    identifiers : ['firstId'],
+                )
+            ]
+        ),
+        new Get(
+            uriTemplate: '/resources/{firstId}/relationships/{secondId}',
+            uriVariables: [
+                'firstId' => new Link(
+                    fromProperty: 'first',
+                    fromClass   : Relationship::class,
+                    identifiers : ['firstId'],
+                ),
+                'secondId' => new Link(
+                    fromProperty: 'second',
+                    fromClass   : Relationship::class,
+                    identifiers : ['secondId'],
+                ),
+            ],
+            provider: RelationShipProvider::class,
+        ),
+    ],
+    mercure   : false
+)]
+
+#[ORM\Entity]
 class Relationship
 {
     #[ORM\Id]
@@ -15,61 +55,19 @@ class Relationship
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column]
+    public string $name = '';
 
-    #[ORM\Column(length: 255)]
-    private ?string $someOtherStuff = null;
+    #[ORM\ManyToOne(targetEntity: Resource::class)]
+    #[ApiProperty(identifier: true)]
+    public Resource $first;
 
-    #[ORM\ManyToOne(inversedBy: 'relationshipsAsFirst')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Resource $first = null;
+    #[ORM\ManyToOne(targetEntity: Resource::class)]
+    #[ApiProperty(identifier: true)]
+    public Resource $second;
 
-    #[ORM\ManyToOne(inversedBy: 'relationshipsAsSecond')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Resource $second = null;
-
-    public function __construct()
+    public function getId(): string
     {
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-
-    public function getSomeOtherStuff(): ?string
-    {
-        return $this->someOtherStuff;
-    }
-
-    public function setSomeOtherStuff(string $someOtherStuff): self
-    {
-        $this->someOtherStuff = $someOtherStuff;
-
-        return $this;
-    }
-
-    public function getFirst(): ?Resource
-    {
-        return $this->first;
-    }
-
-    public function setFirst(?Resource $first): self
-    {
-        $this->first = $first;
-
-        return $this;
-    }
-
-    public function getSecond(): ?Resource
-    {
-        return $this->second;
-    }
-
-    public function setSecond(?Resource $second): self
-    {
-        $this->second = $second;
-
-        return $this;
+        return $this->first->getId().'-'.$this->second->getId();
     }
 }
