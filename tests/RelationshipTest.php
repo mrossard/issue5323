@@ -34,6 +34,7 @@ class RelationshipTest extends ApiTestCase
 
         $iri = $this->iriConverter->getIriFromResource($dep);
         $this->assertTrue(true); //we just need the previous line not to throw an exception
+        $this->assertEquals('/resources/1/relationships/2', $iri);
     }
 
     public function testGetCollection(): void
